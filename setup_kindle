@@ -1,0 +1,63 @@
+# Find Kindle!
+KINDLE=`grep '^/dev/.* on /media/.*/Kindle' <(mount) | cut -d' ' -f3`
+if [[ -z $KINDLE ]]; then
+  echo "Found kindle at $KINDLE."
+else
+  echo "Couldn't find kindle :("
+  exit 13
+fi
+
+# Find necessary files
+test -f kindle-5.4-jailbreak.zip || { echo "Couldn't find kindle-5.4-jailbreak.zip :(" && exit 13 }
+test -f KUAL-KDK-2.0.azw2 || { echo "Couldn't find KUAL-KDK-2.0.azw2 :(" && exit 13 }
+test -f kual-mrinstaller-1.5.N.zip || { echo "Couldn't find kual-mrinstaller-1.5.N.zip :(" && exit 13 }
+test -f kual-helper-0.4.N.zip || { echo "Couldn't find kual-helper-0.4.N.zip :(" && exit 13 }
+test -f kual-kual-plus-0.2.N.zip || { echo "Couldn't find kual-kual-plus-0.2.N.zip :(" && exit 13 }
+test -f kual-gawk-1.4.N.zip || { echo "Couldn't find kual-gawk-1.4.N.zip :(" && exit 13 }
+
+echo "Jailbreaking Kindle..."
+unzip kindle-5.4-jailbreak.zip -d $KINDLE/
+umount $KINDLE
+read -p "Unplug the Kindle from the computer!"
+echo "On the Kindle, go to [MENU] > Settings > [MENU] > Update Your Kindle"
+echo "and wait for it to display the text 'JAILBREAK'."
+read
+read -p "Plug the Kindle back in."
+
+echo "Installing KUAL..."
+cp KUAL-KDK-2.0.azw2 $KINDLE/documents
+umount $KINDLE
+read -p "Unplug the Kindle from the computer!"
+echo "On the Kindle, go to [MENU] > Settings > [MENU] > Restart"
+echo "and wait for it to restart."
+read
+read -p "Plug the Kindle back in."
+
+echo "Installing MR Installer..."
+unzip kual-mrinstaller-1.5.N.zip -d $KINDLE
+echo "Installing python and linkss library..."
+cp Update_python_0.11.N_install_touch_pw.bin $KINDLE/mrpackages
+cp Update_linkss_0.21.N_install_touch_pw.bin $KINDLE/mrpackages
+umount $KINDLE
+read -p "Unplug the Kindle from the computer!"
+echo "On the Kindle, go to KUAL > Helper > Install MR Packages"
+echo "and wait for the install to finish."
+read
+read -p "Plug the Kindle back in."
+
+echo "Installing KUAL helper..."
+unzip -oq kual-helper-0.4.N.zip -d /$KINDLE
+echo "Installing KUAL+..."
+unzip -oq kual-kual-plus-0.2.N.zip -d /$KINDLE
+echo "Installing gawk..."
+unzip -oq kual-gawk-1.4.N.zip -d /$KINDLE
+umount $KINDLE
+read -p "Unplug the Kindle from the computer!"
+echo "On the Kindle, go to KUAL > KUAL+ > * Install gawk binary *"
+read
+echo "To set up the screensaver, go to KUAL > ScreenSavers > <your choice>"
+echo "When you put the kindle to sleep, you should see an image announcing"
+echo "the screensavers hack is enabled."
+read
+read -p "Restart the Kindle. Wait for the restart to finish..."
+read -p "Plug the Kindle back in."
